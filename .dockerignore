@@ -1,0 +1,21 @@
+# Exclude things that don't belong in the published image.
+# pyproject.toml / uv.lock / README.md / src/ are explicitly COPY'd
+# by the Dockerfile, so we don't need an allow-list here — just a
+# denylist for the obvious noise.
+
+.git
+.github
+.venv
+.gitignore
+.dockerignore
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.coverage
+htmlcov
+docs
+tests
+humans_notes.md
+worktrees

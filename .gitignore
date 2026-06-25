@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+
+# Build artifacts (uv build / hatchling)
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.ty_cache/
+.mypy_cache/
+
+# venv / uv
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local test artifacts
+/tmp-wiki/
+
+# Transient release artifact: scripts/generate_changelog.py writes this for
+# `gh release create --notes-file`; it's regenerated every release, never committed.
+release-body.md
+
+# Secrets
+.env
+.env.*

@@ -1,0 +1,4 @@
+# Canonicalize commit identity to the public project identity.
+# Maps the personal GitHub handle email to the ParkviewLab identity so any
+# tooling (git shortlog, blame, forges) shows the canonical author/committer.
+Gary Frattarola <garyf@parkviewlab.ai> <garycoding@gmail.com>

@@ -1,0 +1,97 @@
+[project]
+name = "cobalt-grinding"
+version = "0.0.1"
+description = "Cobalt Grinding — an agentic LLM-Wiki: ingest sources, retrieve, converse."
+readme = "README.md"
+requires-python = ">=3.13"
+license = "AGPL-3.0-or-later"
+license-files = ["LICENSE"]
+authors = [{ name = "Gary Frattarola", email = "garyf@parkviewlab.ai" }]
+dependencies = [
+    # >=0.30 — list_tables() returns a ListTablesResponse with a .tables
+    # attribute. cobalt-grinding uses LanceDB ONLY for the M2.5
+    # tools_index (its own internal store under cobalt_grinding_dir). The
+    # wiki's LanceDB is owned by the smalt-mcp child's process post-M2.7.
+    "lancedb>=0.30",
+    # fastembed: tools_index embeds MCP child tool descriptions for hybrid
+    # retrieval. The wiki's embeddings are smalt-mcp's responsibility.
+    "fastembed",
+    "mcp[cli]>=1.27.0",
+    "pydantic>=2.6",
+    "tomlkit",
+    "click>=8.1",  # cobalt-grinding uses click for its own CLI flags (--smalt, --config, etc.)
+    "platformdirs>=4.0",
+    "numpy",       # used by host/embedder.py
+    "pyarrow",     # used by host/tools_index.py for the tools-index LanceDB schema
+    # Pinned <1.0 — anthropic SDK is on the 0.x track and has no public
+    # 1.0 milestone yet. 0.x minors can break (weekly cadence; CMA Memory
+    # landed in 0.97). When 1.0 ships, bump deliberately and verify the
+    # messages.create signature + content-block shapes used in
+    # cobalt_grinding/host/provider.py.
+    "anthropic>=0.97,<1.0",
+]
+
+[project.scripts]
+# `cobalt-grinding` (the CLI) extracted into the cogrind-workshop repo (see
+# https://github.com/ParkviewLab/cogrind-workshop). This package now
+# only ships the server binary; humans drive it via cogrind-workshop,
+# Claude Desktop, Claude Code, or any other MCP client.
+#
+# M2.7 Step 3: server binary renamed from `cobalt-grinding` to
+# `cobalt-grinding` to match the sibling-MCP-server convention
+# (binary name = repo name, like smalt-mcp / ebony-enriching /
+# deco-assaying). The package binary is now what users actually run:
+# `cobalt-grinding --help` etc.
+cobalt-grinding = "cobalt_grinding.daemon.main:run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cobalt_grinding"]
+
+# M2.7: dropped the cobalt_grinding/templates/ force-include block — the
+# SCHEMA.md / POLICY.md templates are smalt-mcp's responsibility now
+# (its `bootstrap` tool materializes equivalents in SMALT_DIR).
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.5",
+    "ty",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+ignore = ["E501"]  # handled by formatter
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ty.src]
+include = ["src"]
+
+[tool.ty.environment]
+python-version = "3.13"
+
+[tool.ty.rules]
+# We can tighten these as the codebase matures.
+unresolved-import = "warn"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Integration tests run by default — they're the only thing that exercises
+# the MCP HTTP transport end-to-end. To skip them locally during fast TDD,
+# pass `-m 'not integration'` explicitly. CI must run everything.
+addopts = "-ra"
+asyncio_mode = "auto"
+markers = [
+    "integration: slow tests that load real models or spawn real subprocesses",
+]

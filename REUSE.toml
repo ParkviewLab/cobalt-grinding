@@ -1,0 +1,9 @@
+version = 1
+
+# Catch-all: everything without its own SPDX header (docs, configs, lock files,
+# Dockerfile, etc.) is covered here. File headers take precedence over this.
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Gary Frattarola <garyf@parkviewlab.ai>"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
