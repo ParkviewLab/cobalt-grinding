@@ -22,3 +22,10 @@ section here, and uses the same content as the GitHub Release body.
 -->
 
 ## [Unreleased]
+
+## [v0.1.0] - 2026-07-01
+
+### Highlights
+
+This initial public release introduces cobalt-grinding, an agentic LLM-Wiki for ingesting sources, retrieving content, and conversing over them, distributed under AGPL-3.0-or-later.
+
