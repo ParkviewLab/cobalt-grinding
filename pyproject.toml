@@ -1,6 +1,6 @@
 [project]
 name = "cobalt-grinding"
-version = "0.0.1"
+version = "0.1.0"
 description = "Cobalt Grinding — an agentic LLM-Wiki: ingest sources, retrieve, converse."
 readme = "README.md"
 requires-python = ">=3.13"
