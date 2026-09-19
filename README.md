@@ -57,7 +57,7 @@ To use as a stdio-transport MCP server (e.g. from Claude Desktop): `cobalt-grind
 
 ## Releasing
 
-Tag-driven via [`.github/workflows/release.yml`](.github/workflows/release.yml). A push of a `v*` tag fires four jobs: a **gate** (tag matches `pyproject.toml` version; tag reachable from `origin/main`) that gates the two **publish** jobs (PyPI + GHCR Docker), and a **changelog** job that runs after the publishes — it generates the new `CHANGELOG.md` section (LLM-written "Highlights" header + `git-cliff` categorized list), commits it back to `main`, and creates the GitHub Release with the same content as its body. Use the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers:
+Tag-driven via [`.github/workflows/release.yml`](.github/workflows/release.yml). A push of a `v*` tag fires four jobs: a **gate** (tag matches the `pyproject.toml` version, which carries no dev marker; tag reachable from `origin/main`; version strictly greater than the previous release tag) that gates the two **publish** jobs (PyPI + GHCR Docker), and a **changelog** job that runs after the publishes — it generates the new `CHANGELOG.md` section (LLM-written "Highlights" header + `git-cliff` categorized list), commits it back to `main`, and creates the GitHub Release with the same content as its body. Use the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers:
 
 ```sh
 git bump minor              # 0.0.1 → 0.1.0, committed
