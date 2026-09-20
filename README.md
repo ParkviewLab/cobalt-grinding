@@ -69,7 +69,7 @@ Don't have the helpers? Install once: `git clone https://github.com/ParkviewLab/
 
 ### Commit message convention
 
-The changelog job categorizes commits using [Conventional Commits](https://www.conventionalcommits.org/) prefixes (see [`cliff.toml`](cliff.toml) for the full list):
+The changelog job categorizes commits using [Conventional Commits](https://www.conventionalcommits.org/) prefixes (the full list is in the ParkviewLab handbook's `commits-and-changelogs.md`):
 
 | Prefix | Section | Notes |
 |---|---|---|
