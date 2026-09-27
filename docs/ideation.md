@@ -218,7 +218,7 @@ These are baked in regardless of which subsystem is being implemented.
 | LanceDB as primary operational index | Built-in hybrid search, purpose-built for this workload, time-travel useful for dev, Python SDK match |
 | DuckDB analytical layer deferred to v1.5 | Cross-cutting analytics is step-2; v1 doesn't need ad-hoc SQL |
 | Python runtime, Claude Agent SDK | Best LLM/agent ecosystem, LanceDB native Python, sub-agent orchestration out of box |
-| Six systems, four in v1 | Synthesis and researcher are easiest to over-promise; deliver boring-and-useful core first |
+| Six systems, three in v1 | Synthesis and researcher are easiest to over-promise; deliver boring-and-useful core first |
 | Custodian in v1.5, not v1 | Maintenance is needed once the corpus has size; not on day one |
 | "Propose, don't act" for auditors | Cost of wrong autonomous edit > cost of slight clutter |
 | Single writer to corpus | Simplifies coordination; preserves audit trail |
@@ -302,13 +302,13 @@ A few observations that informed the design but didn't end up in any one section
 
 The plan in `docs/plan.md` is the v1 cut of all of the above. Mapping:
 
-- §2 (source types) → Phases 2, 5, 6 of the plan.
-- §3 (original structure) → `structure_extractor` sub-agent + `raw/<source-id>/structure.json`.
+- §2 (source types) → Phases 2, 5, 6 of the v1 plan as approved on 2026-05-02.
+- §3 (original structure) → `structure_extractor` sub-agent + `raw/<source-id>/structure.json` in the v1 plan as approved on 2026-05-02.
 - §4 (storage) → Phases 0–1 of the plan; LanceDB choice locked in.
 - §5 (retrieval) → Phase 3 of the plan.
 - §6 (agentic systems) → Plan implements Ingestion (Phase 2), Retrieval (Phase 3), Sage (Phase 4); Custodian/Synthesis/Researcher noted as deferred.
 - §7 (principles) → embedded throughout the plan.
-- §9 (deferred) → "OUT" section + Phase 7+ stub of the plan.
+- §9 (deferred) → "OUT" section + Phase 7+ stub of the v1 plan as approved on 2026-05-02.
 - §10 (open questions) → carried directly into the plan's "Open questions" section.
 
 When the plan needs revisiting, this document is the trail back to *why*.

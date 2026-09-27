@@ -1,5 +1,9 @@
 # Anthropic Introspection MCP Server — Planning Brief (v4)
 
+**Date:** 2026-06-25
+**Format:** dated record — a planning brief for a server not yet built, and a survey of the candidate MCP servers considered and set aside instead
+**Status:** not current guidance; two of the candidates it names, `shin-bot-litellm/litellm-mcp` and `ahays248/llama-mcp-server`, no longer resolve on GitHub (404, checked 2026-09-27)
+
 ## Purpose
 
 A Model Context Protocol server that lets an agent (or its host) query metadata about the Anthropic API and the model it's running on: model capabilities, context-window budget, current rate-limit state, and token-counting for planned requests. It does not proxy chat completions — it's a sidecar for self-knowledge, not inference.

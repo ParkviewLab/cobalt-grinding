@@ -1,5 +1,9 @@
 # deco-assaying — what its outputs actually look like
 
+**Date:** 2026-06-25
+**Format:** dated record of a pre-M3 investigation
+**Status:** the questions it raised have since been answered by the code; kept for the record, not as current guidance
+
 > Captured from a self-index of `https://github.com/ParkviewLab/deco-assaying@develop`
 > via a locally-running deco-assaying MCP server. Indexing 66 files (55 Python, 11k LOC) took **1.67 seconds**
 > end-to-end. Purpose: stress-test `docs/plan.md` M3's `parse_file`-shaped
@@ -222,7 +226,7 @@ Real surface:
 
 ## 6a. The "no source copies" rule does NOT apply to deco-assaying output
 
-I initially recommended that we *not* persist `chunks[].text` to the wiki on the strength of cobalt-grinding's "no source copies" rule. That was wrong. Clarification (per Gary):
+I initially recommended that we *not* persist `chunks[].text` to the wiki on the strength of cobalt-grinding's "no source copies" rule. That was wrong. Clarification:
 
 > Deco-assaying is a tool that analyzes and summarizes for our agentic system. Its output is not the source — the source is the repo it analyzed. So copying deco-assaying output into our markdown is fine, on a case-by-case basis.
 

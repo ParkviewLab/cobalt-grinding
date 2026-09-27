@@ -1,3 +1,5 @@
+> **Date:** 2026-06-25
+>
 > A captured design Q&A on model self-knowledge for agents (referenced from
 > [`northstar.md`](northstar.md)): what an agent benefits from knowing about
 > the model it runs on, and how much of that is observable from llama.cpp vs.

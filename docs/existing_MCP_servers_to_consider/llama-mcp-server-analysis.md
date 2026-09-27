@@ -1,5 +1,9 @@
 **Repository:** [ahays248/llama-mcp-server](https://github.com/ahays248/llama-mcp-server)
 
+**Date:** 2026-06-25
+**Format:** dated record — an analysis of a candidate MCP server considered and set aside
+**Status:** not current guidance; the repository above no longer resolves on GitHub (404, checked 2026-09-27)
+
 # llama-mcp-server Analysis Report
 
 ## Overview
