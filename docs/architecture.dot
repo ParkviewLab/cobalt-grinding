@@ -77,7 +77,7 @@ digraph CoGrind {
         color="#888888";
         fontcolor="#555555";
 
-        smalt_dir [label="SMALT_DIR\n~/Documents/Smalt/\n  pages/*.md\n  lance/  (wiki vectors + BM25)",
+        smalt_dir [label="SMALT_DIR\n~/Documents/Smalt/\n  pages/*.md\n  index/lance/  (wiki vectors + BM25)",
                    shape=folder, style=filled, fillcolor="#fff2cc"];
         ebony_dir [label="EBONY_ENRICHING_DIR\n~/Documents/EbonyEnriching/\n  (markdown notebook;\n   no DB, no embedder)",
                    shape=folder, style=filled, fillcolor="#fff2cc"];
@@ -90,7 +90,7 @@ digraph CoGrind {
     // ───────────────────────────────────────────────────────────────────
     // Architecturally-significant library dependencies
     // (only the ones that shape what each process *is* — not transitive
-    //  noise. uvicorn/Starlette/FastAPI are listed once as the shared
+    //  noise. uvicorn/Starlette are listed once as the shared
     //  HTTP transport rather than redrawn per server.)
     // ───────────────────────────────────────────────────────────────────
     subgraph cluster_libs {
@@ -101,7 +101,7 @@ digraph CoGrind {
 
         mcp_lib       [label="mcp[cli]\n(MCP protocol;\n stdio + streamable-http)",
                        shape=component, style=filled, fillcolor="#f0f0f0"];
-        http_stack    [label="uvicorn + Starlette\n+ FastAPI\n(HTTP transport,\n shared by all servers)",
+        http_stack    [label="uvicorn + Starlette\n(HTTP transport,\n shared by all servers)",
                        shape=component, style=filled, fillcolor="#f0f0f0"];
         lancedb       [label="LanceDB\n(vector + BM25 store)",
                        shape=component, style=filled, fillcolor="#f0f0f0"];
@@ -124,7 +124,7 @@ digraph CoGrind {
     // ───────────────────────────────────────────────────────────────────
 
     // Human → CLI → host
-    human    -> workshop [label="types in REPL\n(/ingest, /ask, ...)"];
+    human    -> workshop [label="types in REPL\n(/ingest, a plain\n question, ...)"];
     workshop -> cobalt   [label="MCP / streamable-http\n(wiki.* tool calls)", color="#2e7d32", penwidth=1.6];
 
     // Host → spawned MCP children (process supervision + tool calls)
