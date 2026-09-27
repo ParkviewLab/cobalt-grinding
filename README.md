@@ -14,12 +14,10 @@ CoGrind is **an MCP server wrapped around an AI brain** — see [`docs/northstar
 
 The three Phase 1 cognitive skills (Ingest / Retrieve / Converse) are wired through the `wiki.*` MCP surface:
 
-- `wiki.ingest` — file or directory → SourcePages + EntityPages + glossary ConceptPages + cross-page links + code symbol outlines (via deco-assaying).
+- `wiki.ingest` — file, directory, git URL (shallow clone), or PDF URL → SourcePages + EntityPages + glossary ConceptPages + cross-page links + code symbol outlines (via deco-assaying).
 - `wiki.search` / `wiki.get_page` / `wiki.traverse` — hybrid retrieval + 1-hop graph expansion.
 - `wiki.ask` — cited natural-language answer with hallucination flagging.
-- `wiki.find_gaps` / `wiki.report_gap` — knowledge-gap queue (Research / M6 will read these in Phase 2).
-
-Phase 2 (Research / Cogitate / Curate) is next.
+- `wiki.find_gaps` / `wiki.report_gap` — knowledge-gap queue.
 
 ## Running
 
@@ -47,29 +45,23 @@ docker run \
   ghcr.io/parkviewlab/cobalt-grinding:latest
 ```
 
-Or pull a specific version: `ghcr.io/parkviewlab/cobalt-grinding:v0.1.0`.
+Or pull a specific version: `ghcr.io/parkviewlab/cobalt-grinding:0.1.0`.
 
 ### Configuration
 
-Bootstrap runs automatically on first startup: the daemon waits for each child to handshake, then calls its `bootstrap` tool. Defaults: `SMALT_DIR=~/Documents/Smalt`, `EBONY_ENRICHING_DIR=~/Documents/EbonyEnriching`. Overrides via `--smalt`, env vars (`COBALT_GRINDING_SMALT_DIR`, `COBALT_GRINDING_EBONY_DIR`), or a `config.toml`. See `uv run cobalt-grinding --help`.
+Bootstrap runs on every startup and is idempotent: the daemon waits for the smalt-mcp and ebony-enriching children to handshake, then calls each one's `bootstrap` tool. Defaults: `SMALT_DIR=~/Documents/Smalt`, `EBONY_ENRICHING_DIR=~/Documents/EbonyEnriching`. Overrides via `--smalt`, env vars (`COBALT_GRINDING_SMALT_DIR`, `COBALT_GRINDING_EBONY_DIR`), or a `config.toml`. See `uv run cobalt-grinding --help`.
 
 To use as a stdio-transport MCP server (e.g. from Claude Desktop): `cobalt-grinding --transport stdio`.
 
 ## Releasing
 
-Tag-driven via [`.github/workflows/release.yml`](.github/workflows/release.yml). A push of a `v*` tag fires four jobs: a **gate** (tag matches the `pyproject.toml` version, which carries no dev marker; tag reachable from `origin/main`; version strictly greater than the previous release tag) that gates the two **publish** jobs (PyPI + GHCR Docker), and a **changelog** job that runs after the publishes — it generates the new `CHANGELOG.md` section (LLM-written "Highlights" header + categorized list written by dev-tools' `generate-changelog`), commits it back to `main`, and creates the GitHub Release with the same content as its body. Use the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers:
+Tag-driven via [`.github/workflows/release.yml`](.github/workflows/release.yml). A push of a `v*` tag fires four jobs: a **gate** (tag matches the `pyproject.toml` version, which carries no dev marker; tag reachable from `origin/main`; version strictly greater than the previous release tag) that gates the two **publish** jobs (PyPI + GHCR Docker), and a **changelog** job that runs after the publishes — it generates the new `CHANGELOG.md` section (LLM-written "Highlights" header + categorized list written by dev-tools' `generate-changelog`), commits it back to `main`, and creates the GitHub Release with the same content as its body.
 
-```sh
-git bump minor              # 0.0.1 → 0.1.0, committed
-git release                 # annotated tag v0.1.0 from pyproject.toml
-git push --follow-tags      # CI fires
-```
-
-Don't have the helpers? Install once: `git clone https://github.com/ParkviewLab/dev-tools.git ~/dev-tools && cd ~/dev-tools && ./install.sh`.
+The procedure, including the `develop` → `main` promotion, is the ParkviewLab handbook's [Cutting a release](https://github.com/ParkviewLab/handbook/blob/main/docs/releases.md#cutting-a-release), run with the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers (`git bump`, `git release`); install them with `git clone https://github.com/ParkviewLab/dev-tools.git ~/dev-tools && cd ~/dev-tools && ./install.sh`.
 
 ### Commit message convention
 
-The changelog job categorizes commits using [Conventional Commits](https://www.conventionalcommits.org/) prefixes (the full list is in the ParkviewLab handbook's `commits-and-changelogs.md`):
+The changelog job groups the release's pull requests by the [Conventional Commits](https://www.conventionalcommits.org/) type of each title (the full list is in the ParkviewLab handbook's `commits-and-changelogs.md`), and lists under Direct commits any commit that reached the release without a pull request; a bookkeeping commit (a version bump, a change to `CHANGELOG.md` alone, a trivial merge) is left out of both:
 
 | Title | Group in the notes | Notes |
 |---|---|---|

@@ -1,6 +1,8 @@
 # Changelog
 
-All notable changes to this project are recorded here. Each release entry has two parts: a **Highlights** paragraph, generated at release time by an Anthropic-API call, and the **categorized changes**, the pull requests merged since the previous tag grouped by their [Conventional Commit](https://www.conventionalcommits.org/) type, with any commit that reached the release without a pull request listed under Direct commits. Both are written by dev-tools' `generate-changelog`, which the release workflow runs at a pinned release.
+All notable changes to this project are recorded here. Each release entry has two parts: a **Highlights** paragraph, generated at release time by an Anthropic-API call, and the **categorized changes**, the pull requests merged since the previous tag grouped by their [Conventional Commit](https://www.conventionalcommits.org/) type, with any commit that reached the release without a pull request listed under Direct commits; a bookkeeping commit (a version bump, a change to `CHANGELOG.md` alone, a trivial merge) is left out of both. Both are written by dev-tools' `generate-changelog`, which the release workflow runs at a pinned release.
+
+The v0.1.0 entry below was written by an earlier version of the generator and carries its Highlights paragraph alone; it stays as published.
 
 The release workflow on every tag push regenerates both, commits the new
 section here, and uses the same content as the GitHub Release body.
