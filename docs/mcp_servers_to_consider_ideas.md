@@ -16,7 +16,7 @@ It gathers two earlier documents: a planning brief for a server that would let a
 
 ### What it would do
 
-A server that lets an agent, or its host, ask about the Anthropic API and the model it runs on: the model's capabilities, the budget of its context window, the current state of the rate limits, and the token count of a planned request. It would not proxy completions: it is a sidecar for self-knowledge, not for inference. It serves the northstar's second thing to remember, that agents need to know about the model they are using.
+A server that lets an agent, or its host, ask about the Anthropic API and the model it runs on: the model's capabilities, the budget of its context window, the current state of the rate limits, and the token count of a planned request. It would not proxy completions: it is a sidecar for self-knowledge, not for inference. It serves the northstar's second thing to remember, that agents need to know about the model they are using; what an agent would do with such knowledge is in [`agent_self_knowledge_ideas.md`](agent_self_knowledge_ideas.md).
 
 The brief found that Claude Code learns what its model supports from the documented `GET /v1/models/{id}` endpoint and from knowledge built into the client; the undocumented endpoints seen in network captures carry telemetry, feature flags and policy settings, not capabilities. So the server would wrap the documented API, with no shortcut available.
 

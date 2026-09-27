@@ -88,6 +88,10 @@ Decided on 2026-05-04 as the seventh system, in Phase 3. It would read tool-gap 
 
 The notebook [`mcp_servers_to_consider_ideas.md`](mcp_servers_to_consider_ideas.md) holds the candidates weighed so far and their open questions: an introspection server for the Anthropic API, planned in a brief and not built (the model's capabilities, its context budget, the state of the rate limits, token counts), with its dependencies chosen against a supply-chain threat; the llama.cpp side of the same knowledge; and the servers set aside, with their state as found on 2026-09-27.
 
+## What should an agent know about the model it runs on?
+
+The northstar asks that agents know the model they use and adapt to it. The notebook [`agent_self_knowledge_ideas.md`](agent_self_knowledge_ideas.md) holds what that knowledge could be (capabilities, the live context budget, the knowledge cutoff and the date, identity, reasoning and sampling settings, template and tool-format quirks, speed, cost and rate state), what `llama-server` and Anthropic's API each expose of it, and the questions it raises for cobalt-grinding's agents.
+
 ## A system that judges the veracity and quality of sources?
 
 A dedicated system (working names Vet, Appraise, Weigh) would rate each source for veracity and quality (the authority of its author or publisher, its recency, the strength of its evidence, whether it was peer-reviewed, the density of its citations, the prior reliability of its domain) and write the scores to the source page's frontmatter. Research would prefer better candidates, Cogitate would weigh conflicting claims by the quality of their sources, and Curate would flag pages whose claims rest on weak sources. It belongs with Toolsmith to Phase 3 (Toolsmith judges capabilities, this system knowledge), after enough corpus exists for the prior reliability of a domain to mean something. smalt-mcp 1.3.3's page schema already has `quality_score`, `veracity_score`, `evaluated_at` and `evaluation_notes`, so no migration of the schema is needed; the daemon does not write them.
