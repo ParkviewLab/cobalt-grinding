@@ -6,11 +6,12 @@ CoGrind is **an MCP server wrapped around an AI brain** — see [`docs/northstar
 
 ## Status
 
-**Phase 1 complete.** The daemon binary (`cobalt-grinding`) is wired as an MCP host that supervises three sibling MCP children:
+**Phase 1 complete.** The daemon binary (`cobalt-grinding`) is wired as an MCP host that supervises four sibling MCP children:
 
 - [`smalt-mcp`](https://github.com/ParkviewLab/smalt-mcp) — the Smalt (canonical knowledge): markdown wiki + LanceDB hybrid retrieval.
 - [`ebony-enriching`](https://github.com/ParkviewLab/ebony-enriching) — the lab notebook: proposals, experiments, gaps.
 - [`deco-assaying`](https://github.com/ParkviewLab/deco-assaying) — code parsing (tree-sitter).
+- [`flint-slating`](https://github.com/ParkviewLab/flint-slating) — PDF reading: the text and metadata of local and remote PDFs.
 
 The three Phase 1 cognitive skills (Ingest / Retrieve / Converse) are wired through the `wiki.*` MCP surface:
 
@@ -28,14 +29,14 @@ The three Phase 1 cognitive skills (Ingest / Retrieve / Converse) are wired thro
 ```sh
 uv sync
 # Install the children you want supervised (each is a standalone MCP server):
-uv pip install smalt-mcp ebony-enriching deco-assaying
+uv pip install smalt-mcp ebony-enriching deco-assaying flint-slating
 # Run the daemon — streamable-HTTP transport on 127.0.0.1:7474 by default:
 uv run cobalt-grinding
 ```
 
 ### From the published Docker image
 
-The image bundles cobalt-grinding + the three sibling MCP servers, so the only thing you need to provide is your Anthropic API key and a host directory to mount as `/data`:
+The image bundles cobalt-grinding + the four sibling MCP servers, so the only thing you need to provide is your Anthropic API key and a host directory to mount as `/data`:
 
 ```sh
 docker run \
