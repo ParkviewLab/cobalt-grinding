@@ -16,6 +16,23 @@ section here, and uses the same content as the GitHub Release body.
 
 ## [Unreleased]
 
+## [v0.1.1] - 2026-09-27
+
+### Highlights
+
+`--version` and the status tool now report the version recorded in the installed package's metadata instead of a hard-coded "0.0.1", and the locked dependencies move past open security advisories in anyio, cryptography and starlette. The documentation has been reorganised around what the code does: `docs/plan.md` and `docs/ideation.md` give way to `docs/architecture.md`, a dated `docs/decisions.md`, `docs/in-flight_ideas.md` and `docs/architecture-why.md`, with two further ideas notebooks and README links, and the README and architecture notes now state that the bundled MCP servers do not run in the published image and that PDF ingestion has no reader. The remaining changes are to the release and changelog workflows, which are now assembled from the shared handbook parts and generate the changelog with the shared dev-tools script.
+
+### Bug fixes
+
+- Anyio, cryptography and starlette past their security advisories (#4)
+- Report the installed version, and bring the documents current with the code (#5)
+
+### Maintenance
+
+- Drop the shallow re-fetch from the version guard (#1)
+- Assemble the release workflows from the handbook's parts (#2)
+- Generate the changelog with dev-tools' shared script (#3)
+
 ## [v0.1.0] - 2026-07-01
 
 ### Highlights
