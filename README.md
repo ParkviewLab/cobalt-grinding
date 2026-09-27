@@ -2,7 +2,7 @@
 
 An agentic LLM-Wiki served as an MCP server. Point it at a directory, file, or URL; it ingests the contents into a markdown-canonical corpus of interlinked notes with structured metadata; serves the result through hybrid retrieval and a conversational interface; and runs the scientific method on itself to grow + audit + propose.
 
-CoGrind is **an MCP server wrapped around an AI brain** — see [`docs/northstar.md`](docs/northstar.md). How the code is put together is described in [`docs/architecture.md`](docs/architecture.md), the dated decisions behind it are in [`docs/decisions.md`](docs/decisions.md), and what is proposed but not built is in [`docs/in-flight_ideas.md`](docs/in-flight_ideas.md); the design conversation that shaped it is in [`docs/ideation.md`](docs/ideation.md).
+CoGrind is **an MCP server wrapped around an AI brain** — see [`docs/northstar.md`](docs/northstar.md). How the code is put together is described in [`docs/architecture.md`](docs/architecture.md), the dated decisions behind it are in [`docs/decisions.md`](docs/decisions.md), and what is proposed but not built is in [`docs/in-flight_ideas.md`](docs/in-flight_ideas.md); the reasoning of the design conversation that shaped it is in [`docs/architecture-why.md`](docs/architecture-why.md).
 
 ## Status
 
