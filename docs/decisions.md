@@ -265,3 +265,7 @@ Decided, in conversation: the difference between the northstar, which says that 
 ## 2026-09-27: flint-slating in the image
 
 Decided, in conversation: the image installs flint-slating beside the other three children, and the README names four. Reason: the daemon starts four children by default and flint-slating is its only reader of PDFs, so the image had no reader of PDFs. Set aside: not recorded.
+
+## 2026-09-27: flint-slating left out of the image
+
+Decided, in conversation, in the words of the option chosen: "Leave flint-slating out until the servers can run, file both faults as tangents, and release." The image and the README's from-source install line therefore install three children, not flint-slating, and the documents state that the default configuration starts four and that the servers cannot run in the image at present. This replaces the entry above of the same day, on flint-slating in the image. Reason: none of the servers can run: the image installs mcp 2.2.0 for them, outside the lockfile, and each crashes on import; and the daemon starts them over stdio while they start as HTTP servers by default, ebony-enriching having no stdio mode. And flint-slating grows the image from 1.2 GB to 7.0 GB.

@@ -13,6 +13,8 @@ CoGrind is **an MCP server wrapped around an AI brain** — see [`docs/northstar
 - [`deco-assaying`](https://github.com/ParkviewLab/deco-assaying) — code parsing (tree-sitter).
 - [`flint-slating`](https://github.com/ParkviewLab/flint-slating) — PDF reading: the text and metadata of local and remote PDFs.
 
+The default configuration starts all four, and flint-slating is the daemon's only reader of PDFs, but the install line and the Docker image below install only the first three, so flint-slating's start fails and PDF ingestion has no reader. The daemon starts each child over stdio, whereas the children start as HTTP servers by default and ebony-enriching has no stdio mode, so with the default configuration no child completes its start.
+
 The three Phase 1 cognitive skills (Ingest / Retrieve / Converse) are wired through the `wiki.*` MCP surface:
 
 - `wiki.ingest` — file, directory, git URL (shallow clone), or PDF URL → SourcePages + EntityPages + glossary ConceptPages + cross-page links + code symbol outlines (via deco-assaying).
@@ -29,14 +31,14 @@ The three Phase 1 cognitive skills (Ingest / Retrieve / Converse) are wired thro
 ```sh
 uv sync
 # Install the children you want supervised (each is a standalone MCP server):
-uv pip install smalt-mcp ebony-enriching deco-assaying flint-slating
+uv pip install smalt-mcp ebony-enriching deco-assaying
 # Run the daemon — streamable-HTTP transport on 127.0.0.1:7474 by default:
 uv run cobalt-grinding
 ```
 
 ### From the published Docker image
 
-The image bundles cobalt-grinding + the four sibling MCP servers, so the only thing you need to provide is your Anthropic API key and a host directory to mount as `/data`:
+The image bundles cobalt-grinding and three of the sibling MCP servers (smalt-mcp, ebony-enriching and deco-assaying, not flint-slating), and takes your Anthropic API key and a host directory to mount as `/data`. The servers cannot run in the image at present: the image installs mcp 2.2.0 for them, outside the lockfile, and each crashes on import; and, as above, the daemon starts them over stdio while they start as HTTP servers by default.
 
 ```sh
 docker run \
