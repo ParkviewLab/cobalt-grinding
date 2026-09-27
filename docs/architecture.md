@@ -6,7 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # cobalt-grinding: architecture
 
-This document describes how cobalt-grinding is put together and what its code does. Why the project exists is stated in [`northstar.md`](northstar.md). The reasoning of the design conversation behind the first plan, with the alternatives it weighed and the directions it set aside, is in [`architecture-why.md`](architecture-why.md); the dated record of the decisions made since is [`decisions.md`](decisions.md); and what has been proposed but not built is in [`in-flight_ideas.md`](in-flight_ideas.md). [`architecture.dot`](architecture.dot) draws the pieces, the repositories they come from and the state each one owns.
+This document describes how cobalt-grinding is put together and what its code does. Why the project exists is stated in [`northstar.md`](northstar.md). The reasoning of the design conversation behind the first plan, with the alternatives it weighed and the directions it set aside, and that plan's work plan as it was written, are in [`architecture-why.md`](architecture-why.md); the dated record of the decisions made since is [`decisions.md`](decisions.md); and what has been proposed but not built is in [`in-flight_ideas.md`](in-flight_ideas.md). [`architecture.dot`](architecture.dot) draws the pieces, the repositories they come from and the state each one owns.
 
 ## What it is
 
