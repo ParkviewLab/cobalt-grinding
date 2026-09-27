@@ -118,7 +118,18 @@ The provenance decided on 2026-05-02: capture a document's table of contents and
 
 ## Should ingest be cheaper, faster, and whole on long sources?
 
-The plan's measures: a small, fast model for the focused extraction steps (a `glossary_extractor_model` key), the larger model being kept for summaries; caching of the model's results keyed by content hash; processing the files of a directory in parallel, left on 2026-05-18 as a later optimisation with a gain of four to eight times expected; and chunking, since each extraction call now sees only a file's first 30,000 characters. For `.h` files, the heuristic decided on 2026-05-03 (C++ when sibling files are C++ or a header uses C++ constructs, decided once for each directory) would replace the caller's `h_lang`.
+The plan's measures: a small, fast model for the focused extraction steps (a `glossary_extractor_model` key), the larger model being kept for summaries; caching of the model's results keyed by content hash; processing the files of a directory in parallel, left on 2026-05-18 as a later optimisation with a gain of four to eight times expected; and chunking, since each extraction call now sees only a file's first 30,000 characters, deco-assaying's chunks being one way to do it for code (next entry). For `.h` files, the heuristic decided on 2026-05-03 (C++ when sibling files are C++ or a header uses C++ constructs, decided once for each directory) would replace the caller's `h_lang`.
+
+## Should ingest use more of deco-assaying's analysis?
+
+The daemon sends each Python, C or C++ file to deco-assaying's `analyze_file` without chunks and renders only the symbols' kinds, names and first lines, and the imports (the decision of 2026-05-18). The investigation of deco-assaying's output on 2026-05-04 found much more in each answer, and proposed using it:
+
+- For a directory, one `index_repo` job (whose status is polled), then `get_file_analysis` for each file, which reuses the stored analysis rather than parsing again; the repository-wide results (a manifest with entry points and counts of test, configuration and generated files, the languages, a symbol index, the parse errors) would enrich the source-index page. A single file would keep `analyze_file`.
+- Richer section pages: the module's docstring (`module_doc`) verbatim; each symbol's `signature` and `doc` rather than its name alone; the calls and inheritance in `references`, as a list or as links between pages, making the call graph part of the Smalt's graph; the per-file `metrics` in one line; and the `literals_of_interest` (URLs, paths, environment variables, SQL, routes) as signals of provenance.
+- The syntax-aware `chunks`, each attributed to its enclosing symbol, given to the summariser in place of the first 30,000 characters (the investigation's own preference), whether or not their text is then kept, which the decision of 2026-05-04 permits.
+- The `is_generated`, `is_test` and `is_config` flags recorded in a section page's frontmatter as signals, never used to leave a file out (decided on 2026-05-04).
+- The parse status taken from the answer's `parse` object (`ok`, `error_nodes`, `missing_nodes`, and `reason` when no parser exists), which the renderer does not read now (see [Extraction](architecture.md#extraction)), so that a partially parsed file is marked as such.
+- Languages beyond Python, C and C++: when investigated, deco-assaying analysed thirteen languages fully (Bash, C, C++, C#, Go, Java, JavaScript, PHP, Python, Ruby, Rust, TSX, TypeScript) and parsed thirty-two more into a generic fallback shape.
 
 ## Should ingest run as a background task?
 
