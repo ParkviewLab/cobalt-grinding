@@ -2,24 +2,25 @@
 
 An agentic LLM-Wiki served as an MCP server. Point it at a directory, file, or URL; it ingests the contents into a markdown-canonical corpus of interlinked notes with structured metadata; serves the result through hybrid retrieval and a conversational interface; and runs the scientific method on itself to grow + audit + propose.
 
-CoGrind is **an MCP server wrapped around an AI brain** — see [`docs/northstar.md`](docs/northstar.md). The implementation arc is in [`docs/plan.md`](docs/plan.md); the design conversation that produced it is in [`docs/ideation.md`](docs/ideation.md).
+CoGrind is **an MCP server wrapped around an AI brain** — see [`docs/northstar.md`](docs/northstar.md). How the code is put together is described in [`docs/architecture.md`](docs/architecture.md), the dated decisions behind it are in [`docs/decisions.md`](docs/decisions.md), and what is proposed but not built is in [`docs/in-flight_ideas.md`](docs/in-flight_ideas.md); the reasoning of the design conversation that shaped it is in [`docs/architecture-why.md`](docs/architecture-why.md).
 
 ## Status
 
-**Phase 1 complete.** The daemon binary (`cobalt-grinding`) is wired as an MCP host that supervises three sibling MCP children:
+**Phase 1 complete.** The daemon binary (`cobalt-grinding`) is wired as an MCP host that supervises four sibling MCP children:
 
 - [`smalt-mcp`](https://github.com/ParkviewLab/smalt-mcp) — the Smalt (canonical knowledge): markdown wiki + LanceDB hybrid retrieval.
 - [`ebony-enriching`](https://github.com/ParkviewLab/ebony-enriching) — the lab notebook: proposals, experiments, gaps.
 - [`deco-assaying`](https://github.com/ParkviewLab/deco-assaying) — code parsing (tree-sitter).
+- [`flint-slating`](https://github.com/ParkviewLab/flint-slating) — PDF reading: the text and metadata of local and remote PDFs.
+
+The default configuration starts all four, and flint-slating is the daemon's only reader of PDFs, but the install line and the Docker image below install only the first three, so flint-slating's start fails and PDF ingestion has no reader. The daemon starts each child over stdio, whereas the children start as HTTP servers by default and ebony-enriching has no stdio mode, so with the default configuration no child completes its start.
 
 The three Phase 1 cognitive skills (Ingest / Retrieve / Converse) are wired through the `wiki.*` MCP surface:
 
-- `wiki.ingest` — file or directory → SourcePages + EntityPages + glossary ConceptPages + cross-page links + code symbol outlines (via deco-assaying).
+- `wiki.ingest` — file, directory, git URL (shallow clone), or PDF URL → SourcePages + EntityPages + glossary ConceptPages + cross-page links + code symbol outlines (via deco-assaying).
 - `wiki.search` / `wiki.get_page` / `wiki.traverse` — hybrid retrieval + 1-hop graph expansion.
 - `wiki.ask` — cited natural-language answer with hallucination flagging.
-- `wiki.find_gaps` / `wiki.report_gap` — knowledge-gap queue (Research / M6 will read these in Phase 2).
-
-Phase 2 (Research / Cogitate / Curate) is next.
+- `wiki.find_gaps` / `wiki.report_gap` — knowledge-gap queue.
 
 ## Running
 
@@ -37,7 +38,7 @@ uv run cobalt-grinding
 
 ### From the published Docker image
 
-The image bundles cobalt-grinding + the three sibling MCP servers, so the only thing you need to provide is your Anthropic API key and a host directory to mount as `/data`:
+The image bundles cobalt-grinding and three of the sibling MCP servers (smalt-mcp, ebony-enriching and deco-assaying, not flint-slating), and takes your Anthropic API key and a host directory to mount as `/data`. The servers cannot run in the image at present: the image installs mcp 2.2.0 for them, outside the lockfile, and each crashes on import; and, as above, the daemon starts them over stdio while they start as HTTP servers by default.
 
 ```sh
 docker run \
@@ -47,41 +48,39 @@ docker run \
   ghcr.io/parkviewlab/cobalt-grinding:latest
 ```
 
-Or pull a specific version: `ghcr.io/parkviewlab/cobalt-grinding:v0.1.0`.
+Or pull a specific version: `ghcr.io/parkviewlab/cobalt-grinding:0.1.0`.
 
 ### Configuration
 
-Bootstrap runs automatically on first startup: the daemon waits for each child to handshake, then calls its `bootstrap` tool. Defaults: `SMALT_DIR=~/Documents/Smalt`, `EBONY_ENRICHING_DIR=~/Documents/EbonyEnriching`. Overrides via `--smalt`, env vars (`COBALT_GRINDING_SMALT_DIR`, `COBALT_GRINDING_EBONY_DIR`), or a `config.toml`. See `uv run cobalt-grinding --help`.
+Bootstrap runs on every startup and is idempotent: the daemon waits for the smalt-mcp and ebony-enriching children to handshake, then calls each one's `bootstrap` tool. Defaults: `SMALT_DIR=~/Documents/Smalt`, `EBONY_ENRICHING_DIR=~/Documents/EbonyEnriching`. Overrides via `--smalt`, env vars (`COBALT_GRINDING_SMALT_DIR`, `COBALT_GRINDING_EBONY_DIR`), or a `config.toml`. See `uv run cobalt-grinding --help`.
 
 To use as a stdio-transport MCP server (e.g. from Claude Desktop): `cobalt-grinding --transport stdio`.
 
 ## Releasing
 
-Tag-driven via [`.github/workflows/release.yml`](.github/workflows/release.yml). A push of a `v*` tag fires four jobs: a **gate** (tag matches `pyproject.toml` version; tag reachable from `origin/main`) that gates the two **publish** jobs (PyPI + GHCR Docker), and a **changelog** job that runs after the publishes — it generates the new `CHANGELOG.md` section (LLM-written "Highlights" header + `git-cliff` categorized list), commits it back to `main`, and creates the GitHub Release with the same content as its body. Use the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers:
+Tag-driven via [`.github/workflows/release.yml`](.github/workflows/release.yml). A push of a `v*` tag fires four jobs: a **gate** (tag matches the `pyproject.toml` version, which carries no dev marker; tag reachable from `origin/main`; version strictly greater than the previous release tag) that gates the two **publish** jobs (PyPI + GHCR Docker), and a **changelog** job that runs after the publishes — it generates the new `CHANGELOG.md` section (LLM-written "Highlights" header + categorized list written by dev-tools' `generate-changelog`), commits it back to `main`, and creates the GitHub Release with the same content as its body.
 
-```sh
-git bump minor              # 0.0.1 → 0.1.0, committed
-git release                 # annotated tag v0.1.0 from pyproject.toml
-git push --follow-tags      # CI fires
-```
-
-Don't have the helpers? Install once: `git clone https://github.com/ParkviewLab/dev-tools.git ~/dev-tools && cd ~/dev-tools && ./install.sh`.
+The procedure, including the `develop` → `main` promotion, is the ParkviewLab handbook's [Cutting a release](https://github.com/ParkviewLab/handbook/blob/main/docs/releases.md#cutting-a-release), run with the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers (`git bump`, `git release`); install them with `git clone https://github.com/ParkviewLab/dev-tools.git ~/dev-tools && cd ~/dev-tools && ./install.sh`.
 
 ### Commit message convention
 
-The changelog job categorizes commits using [Conventional Commits](https://www.conventionalcommits.org/) prefixes (see [`cliff.toml`](cliff.toml) for the full list):
+The changelog job groups the release's pull requests by the [Conventional Commits](https://www.conventionalcommits.org/) type of each title (the full list is in the ParkviewLab handbook's `commits-and-changelogs.md`), and lists under Direct commits any commit that reached the release without a pull request; a bookkeeping commit (a version bump, a change to `CHANGELOG.md` alone, a trivial merge) is left out of both:
 
-| Prefix | Section | Notes |
+| Title | Group in the notes | Notes |
 |---|---|---|
+| any type with `!` after it (`feat!:`), or a breaking-change footer | Breaking changes | listed there once, whatever its type |
 | `feat:` | Features | user-visible |
 | `fix:` | Bug fixes | user-visible |
 | `perf:` | Performance | user-visible |
 | `refactor:` | Refactor | |
 | `docs:` | Docs | |
 | `test:` | Tests | |
-| `chore:` / `ci:` / `build:` / `style:` | _(dropped)_ | not surfaced in CHANGELOG |
+| `revert:` | Reverts | GitHub's Revert button titles a PR `Revert "…"`, which has no type |
+| `build:` / `chore:` / `ci:` / `style:` | Maintenance | |
+| any other title | Other changes | the whole title |
+| a commit with no pull request | Direct commits | its subject and short hash |
 
-Squash-merge PRs use the PR title as the commit subject — so the **PR title** is what needs the prefix. Commits without a recognised prefix are silently dropped from the CHANGELOG (still in git history). The "Highlights" paragraph at the top of each release section is generated at release time by the workflow (requires the `ANTHROPIC_API_KEY` org-level secret); if the LLM call fails, a placeholder lands and the release still ships.
+A title without a recognised type is not dropped: it is listed whole under Other changes. So prefix your PR titles, and correct a title before the merge, since retitling afterwards does not change the commit. The groups appear in the order above, and an empty group is left out.
 
 ## License
 

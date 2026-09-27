@@ -4,4 +4,9 @@
 
 """Cobalt Grinding — an agentic LLM-Wiki."""
 
-__version__ = "0.0.1"
+from importlib.metadata import PackageNotFoundError, version
+
+try:
+    __version__: str = version("cobalt-grinding")
+except PackageNotFoundError:  # editable install before first build
+    __version__ = "0.0.0+local"

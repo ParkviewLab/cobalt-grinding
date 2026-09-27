@@ -7,14 +7,16 @@ COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --no-dev --no-install-project
 
-# Layer 2: install the project itself + the three sibling MCP servers
-# cobalt-grinding spawns as children. README.md is part of pyproject's
-# metadata (project.readme); the first uv sync skipped reading it, but
-# the second sync (with --install-project) needs it. Bundling the
-# children keeps the "out of the box demo" working — `docker run …`
-# starts a daemon that has a Smalt + lab notebook + code parser ready
-# without extra installs. Operators who want to swap or omit a child
-# can override the [mcp.clients.*] config or remove its env entry.
+# Layer 2: install the project itself, then three of the four MCP
+# servers the daemon's default configuration starts as children:
+# smalt-mcp, ebony-enriching and deco-assaying. flint-slating, the
+# fourth and the daemon's only PDF reader, is not installed, so its
+# start fails in this image. README.md is part of pyproject's metadata
+# (project.readme); the first uv sync skipped reading it, but the
+# second sync (with --install-project) needs it. The children go into
+# the system Python with `uv pip install`, outside uv.lock. A child can
+# be left unstarted with `autostart = false` in its
+# [mcp.clients.<name>] table.
 COPY README.md ./
 COPY src/ src/
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -41,6 +43,6 @@ VOLUME ["/data"]
 
 # `ANTHROPIC_API_KEY` must be passed at run time
 # (`docker run -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY …`). Without it
-# the daemon still starts and substrate-bootstraps; cognitive-skill
-# tools (wiki.ask, etc.) will return a clear error at call time.
+# the daemon still starts; cognitive-skill tools (wiki.ask, etc.) will
+# return a clear error at call time.
 CMD ["uv", "run", "cobalt-grinding"]

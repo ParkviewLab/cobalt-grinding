@@ -1,6 +1,6 @@
 # CoGrind — North Star
 
-> **What this document is.** A living statement of what CoGrind *is* and what it's for. Read this before designing or implementing anything; come back to it when a decision feels off. If a proposed change doesn't fit the north star, that's a signal to stop and reconsider — either the change is wrong or the north star needs to evolve. This document is **deliberately not implementation detail** — those live in `plan.md`. This is the orienting principle.
+> **What this document is.** A living statement of what CoGrind *is* and what it's for. Read this before designing or implementing anything; come back to it when a decision feels off. If a proposed change doesn't fit the north star, that's a signal to stop and reconsider — either the change is wrong or the north star needs to evolve. This document is **deliberately not implementation detail** — those live in `architecture.md`. This is the orienting principle.
 
 ---
 
@@ -45,7 +45,7 @@ CoGrind's Smalt holds more than the user's knowledge. It also holds the Smalt's 
 - **Schema** — page types, frontmatter shape, link-edge vocabulary (`SCHEMA.md` + `frontmatter_schema.py`).
 - **Policy** — agent behavior rules (`POLICY.md`).
 - **Agent definitions** — the SME agents that run the cognitive skills (role, domain, prompt, declared toolkit), as markdown.
-- **Tool inventory** — which MCP servers CoGrind uses (the `existing_MCP_servers_to_consider/` directory and its successors).
+- **Tool inventory** — which MCP servers CoGrind uses (the `mcp_servers_to_consider_ideas.md` notebook and its successors).
 - **Vocabulary** — the glossary and the domains it's organized by.
 
 Every layer is groomed by the same loop: **propose, don't act; humans approve; the Smalt applies.** Day 0 — humans + Claude seed every layer ("birthing the 0-day CoGrind"). Day 1+ — the system proposes; humans approve; the Smalt grows up. Where the layer's grooming lives: schema → M7 Cogitate proposes additions, M8 Curate flags drift; agents and toolkits → M2.5 future seam, with Cogitate / Curate / Toolsmith jointly grooming over time; tool inventory → Toolsmith (Phase 3); vocabulary → Ingest writes, Curate prunes.
@@ -68,7 +68,7 @@ The lifecycle is **Observe → Hypothesize → Predict → Test → Validate →
 
 This shape connects directly to *Things to Remember* item 1 below: the LLM hypothesizes; **code** runs the test. Hypothesis-generation needs judgment; test-execution needs determinism. Don't make an LLM do what code can do — and equally, don't make code do the part that needs judgment.
 
-The implementation seam — proposal document shape, lifecycle states, cost tiers, test mechanics by layer, and the apply-time post-mortem — lives in `plan.md` under *Proposal document shape and lifecycle* and *Apply-time post-mortem: closing the learning loop*.
+The implementation seam — proposal document shape, lifecycle states, cost tiers, test mechanics by layer, and the apply-time post-mortem — lives in `in-flight_ideas.md` under *How should proposals be shaped, tested and applied?* and *Should every applied proposal get a post-mortem?*.
 
 ---
 
@@ -154,7 +154,7 @@ The two compose. A specialized agent often *uses* code (via MCP children) to do 
 - **Toolsmith** (Phase 3, the 7th system) proposes adding *new* tools — finding existing MCP servers or writing a requirements doc for one to be built — when the agent needs a capability nothing in the inventory provides.
 - **Curate** flags declared-but-never-used tools for removal.
 
-So the same self-evolution discipline CoGrind applies to the Smalt — propose, don't act; humans stay in the approval loop until trust is earned — applies to CoGrind's own roster of agents *and* to the capability surface those agents reach for. **CoGrind grooms its own agents, and grooms its own toolset.** Until Toolsmith exists (Phase 3), humans + Claude play its role: when an agentic system hits a capability gap, we either find an existing MCP server or spawn a new project (deco-assaying was the first). The implementation seam for this lives in `plan.md` under M2.5's "Future seams" → *Agent-declared toolkits, system-curated over time*; Toolsmith itself is sketched in M9+.
+So the same self-evolution discipline CoGrind applies to the Smalt — propose, don't act; humans stay in the approval loop until trust is earned — applies to CoGrind's own roster of agents *and* to the capability surface those agents reach for. **CoGrind grooms its own agents, and grooms its own toolset.** Until Toolsmith exists (Phase 3), humans + Claude play its role: when an agentic system hits a capability gap, we either find an existing MCP server or spawn a new project (deco-assaying was the first). The implementation seam for this lives in `in-flight_ideas.md` under *Should agents be defined as documents with declared toolkits?*; Toolsmith itself is sketched under *How should Toolsmith (M9+) work?*.
 
 When you find yourself wanting a new capability, ask:
 
@@ -162,14 +162,14 @@ When you find yourself wanting a new capability, ask:
 - *Does this require choosing the best of several reasonable answers?* → agent.
 - *Does it need both?* → an agent that calls code via MCP. (This is the common case in CoGrind.)
 
-When the answer is "code, and we don't have it yet," the deliverable is a **requirements doc for a new MCP server** — what tools it exposes, what shape they return, what languages or formats it covers — not a new package inside CoGrind. The capability-vs-infrastructure line in `plan.md` is what *enforces* that boundary; this section is what *guides the choice* in the first place.
+When the answer is "code, and we don't have it yet," the deliverable is a **requirements doc for a new MCP server** — what tools it exposes, what shape they return, what languages or formats it covers — not a new package inside CoGrind. The capability-vs-infrastructure line in `decisions.md` is what *enforces* that boundary; this section is what *guides the choice* in the first place.
 
 ---
 
 ## Things to Remember
 
 1. Do not make an LLM do something that plain old code can do.
-2. Agents need to know all about the model they are using (see docs/what_an_agent_needs_to_know.md) and use that knowledge to adapt their methods to their environment (model)
+2. Agents need to know all about the model they are using (see docs/agent_self_knowledge_ideas.md) and use that knowledge to adapt their methods to their environment (model)
 3. Prefer "divide and conquer" over "stop-compress-continue". Meaning, agents should strive to keep their tasks within the limits of the available context window. Example: need a summary of something big? have another agent do it for you so you don't waste context window on a non-context dependent side task like summarizing.
 
 ---
@@ -178,7 +178,7 @@ When the answer is "code, and we don't have it yet," the deliverable is a **requ
 
 - **When designing a new system or sub-agent**, ask: does this fit the memory + cognitive skills frame? If it doesn't, either the design is wrong or the north star needs to evolve. Pick deliberately.
 - **When deciding what to build vs. defer**, ask: does this make the brain learn or think better, or does it just make CoGrind a different kind of thing? Prefer the former.
-- **When the implementation feels heavy**, ask: am I building infrastructure for the brain, or am I building CoGrind into something it isn't? The capability-vs-infrastructure line in `plan.md` is downstream of this question.
+- **When the implementation feels heavy**, ask: am I building infrastructure for the brain, or am I building CoGrind into something it isn't? The capability-vs-infrastructure line in `decisions.md` is downstream of this question.
 - **When a tradeoff feels close**, default to the choice that keeps the Smalt readable, traceable, and human-fixable. That's the deepest property of the brain.
 
-This document evolves. When a fundamental decision changes the shape of CoGrind, update the north star *before* updating `plan.md` — the north star is the why; `plan.md` is the how.
+This document evolves. When a fundamental decision changes the shape of CoGrind, update the north star *before* updating `architecture.md` — the north star is the why; `architecture.md` is the how.
