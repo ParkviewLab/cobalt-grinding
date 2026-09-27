@@ -43,6 +43,6 @@ VOLUME ["/data"]
 
 # `ANTHROPIC_API_KEY` must be passed at run time
 # (`docker run -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY …`). Without it
-# the daemon still starts and substrate-bootstraps; cognitive-skill
-# tools (wiki.ask, etc.) will return a clear error at call time.
+# the daemon still starts; cognitive-skill tools (wiki.ask, etc.) will
+# return a clear error at call time.
 CMD ["uv", "run", "cobalt-grinding"]
