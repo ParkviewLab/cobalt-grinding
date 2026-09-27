@@ -16,6 +16,16 @@ section here, and uses the same content as the GitHub Release body.
 
 ## [Unreleased]
 
+## [v0.1.2] - 2026-09-27
+
+### Highlights
+
+This release is internal maintenance: the project switches from squash merges and a direct back-merge to merge commits and a back-merge pull request, with the version-guard and release workflows re-assembled from the handbook templates and their dev-tools pins moved to v1.5.1. The only change visible to contributors is the contributing guide, which now documents merge commits and the back-merge pull request that closes a release.
+
+### Maintenance
+
+- Merge commits and the checked back-merge pull request (#6)
+
 ## [v0.1.1] - 2026-09-27
 
 ### Highlights
