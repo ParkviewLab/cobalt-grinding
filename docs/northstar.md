@@ -125,7 +125,7 @@ The vocabulary, kept tight on purpose so the metaphor and the system stay tracea
 |---|---|
 | **Cobalt-Grinding** | The project. The act. The metaphor's source — historically, grinding fired cobalt-blue glass produces a fine pigment. |
 | **CoGrind** | The styled project name in prose. PascalCase preserves the seam: **Co** is the periodic-table symbol for cobalt, **Grind** is the action. |
-| **`cobalt-grinding`** | The daemon binary, shipped by this repo. (Earlier drafts used a separate `cogrindd`/`cogrind` daemon+CLI split; M2.7 collapsed that — the daemon is now `cobalt-grinding` and the CLI moved to a sibling repo.) |
+| **`cobalt-grinding`** | The daemon binary, shipped by this repo. |
 | **`cogrind-workshop`** | The user-facing CLI; sibling repo [ParkviewLab/cogrind-workshop](https://github.com/ParkviewLab/cogrind-workshop). Pure MCP client; one of many that can drive a running `cobalt-grinding`. |
 | **The Smalt** | The canonical substrate of frontmattered markdown files (entity pages, concept pages, source pages, synthesis pages, index pages) plus their on-disk organization. The canonical-knowledge half of CoGrind's memory. *Smalt* is the historical name for the pigment that comes out of cobalt-grinding. |
 | **The lab notebook** | The research-in-flight substrate — proposals, experiments, gaps. The scientific-method record. Lives in `EBONY_ENRICHING_DIR`, served by `ebony-enriching`. Conceptually the lab notebook a scientist carries; the Smalt is the library. |
