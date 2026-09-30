@@ -1,6 +1,6 @@
 [project]
 name = "cobalt-grinding"
-version = "0.1.2"
+version = "0.1.3.dev0"
 description = "Cobalt Grinding — an agentic LLM-Wiki: ingest sources, retrieve, converse."
 readme = "README.md"
 requires-python = ">=3.13"
@@ -16,7 +16,7 @@ dependencies = [
     # fastembed: tools_index embeds MCP child tool descriptions for hybrid
     # retrieval. The wiki's embeddings are smalt-mcp's responsibility.
     "fastembed",
-    "mcp[cli]>=1.27.0",
+    "mcp[cli]>=1.27,<2",
     "pydantic>=2.6",
     "tomlkit",
     "click>=8.1",  # cobalt-grinding uses click for its own CLI flags (--smalt, --config, etc.)
@@ -89,7 +89,8 @@ unresolved-import = "warn"
 testpaths = ["tests"]
 # Integration tests run by default — they're the only thing that exercises
 # the MCP HTTP transport end-to-end. To skip them locally during fast TDD,
-# pass `-m 'not integration'` explicitly. CI must run everything.
+# pass `-m 'not integration'` explicitly. CI skips them
+# (`-m 'not network and not integration'`).
 addopts = "-ra"
 asyncio_mode = "auto"
 markers = [
