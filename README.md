@@ -6,7 +6,7 @@ CoGrind is **an MCP server wrapped around an AI brain** — see [`docs/northstar
 
 ## Status
 
-**Phase 1 complete.** The daemon binary (`cobalt-grinding`) is wired as an MCP host that supervises four sibling MCP children:
+The daemon (`cobalt-grinding`) serves twelve `wiki.*` tools for three cognitive skills (Ingest, Retrieve, Converse) and supervises four sibling MCP children:
 
 - [`smalt-mcp`](https://github.com/ParkviewLab/smalt-mcp) — the Smalt (canonical knowledge): markdown wiki + LanceDB hybrid retrieval.
 - [`ebony-enriching`](https://github.com/ParkviewLab/ebony-enriching) — the lab notebook: proposals, experiments, gaps.
@@ -15,7 +15,7 @@ CoGrind is **an MCP server wrapped around an AI brain** — see [`docs/northstar
 
 The default configuration starts all four, and flint-slating is the daemon's only reader of PDFs, but the install line and the Docker image below install only the first three, so flint-slating's start fails and PDF ingestion has no reader. The daemon starts each child over stdio, whereas the children start as HTTP servers by default and ebony-enriching has no stdio mode, so with the default configuration no child completes its start.
 
-The three Phase 1 cognitive skills (Ingest / Retrieve / Converse) are wired through the `wiki.*` MCP surface:
+The three cognitive skills are served through the `wiki.*` MCP surface:
 
 - `wiki.ingest` — file, directory, git URL (shallow clone), or PDF URL → SourcePages + EntityPages + glossary ConceptPages + cross-page links + code symbol outlines (via deco-assaying).
 - `wiki.search` / `wiki.get_page` / `wiki.traverse` — hybrid retrieval + 1-hop graph expansion.
@@ -60,7 +60,7 @@ To use as a stdio-transport MCP server (e.g. from Claude Desktop): `cobalt-grind
 
 Tag-driven via [`.github/workflows/release.yml`](.github/workflows/release.yml). A push of a `v*` tag fires four jobs: a **gate** (tag matches the `pyproject.toml` version, which carries no dev marker; tag reachable from `origin/main`; version strictly greater than the previous release tag) that gates the two **publish** jobs (PyPI + GHCR Docker), and a **changelog** job that runs after the publishes — it generates the new `CHANGELOG.md` section (LLM-written "Highlights" header + categorized list written by dev-tools' `generate-changelog`), commits it back to `main`, and creates the GitHub Release with the same content as its body.
 
-The procedure, including the `develop` → `main` promotion, is the ParkviewLab handbook's [Cutting a release](https://github.com/ParkviewLab/handbook/blob/main/docs/releases.md#cutting-a-release), run with the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers (`git bump`, `git release`); install them with `git clone https://github.com/ParkviewLab/dev-tools.git ~/dev-tools && cd ~/dev-tools && ./install.sh`.
+The procedure, including the `develop` → `main` promotion, is the ParkviewLab handbook's [Cutting a release](https://github.com/ParkviewLab/handbook/blob/main/docs/releases.md#cutting-a-release), run with the [`ParkviewLab/dev-tools`](https://github.com/ParkviewLab/dev-tools) helpers (`git bump`, `git release`, and `git back-merge`, which ends every release by a pull request into `develop`; see the handbook's [The release's last step](https://github.com/ParkviewLab/handbook/blob/main/docs/releases.md#the-releases-last-step-the-back-merge-pull-request)); install them with `git clone https://github.com/ParkviewLab/dev-tools.git ~/dev-tools && cd ~/dev-tools && ./install.sh`.
 
 ### Commit message convention
 

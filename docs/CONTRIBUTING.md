@@ -49,7 +49,7 @@ uv sync
 uv run ruff check src tests
 uv run ruff format --check src tests
 uv run ty check
-uv run pytest -m "not network and not docling" -q
+uv run pytest -m "not network and not integration" -q
 uvx --from "reuse[charset-normalizer]" reuse lint
 ```
 
@@ -66,5 +66,6 @@ never type it on a `git tag` line — use `git bump` / `git release` from
 ## AI contributors
 
 Read `docs/northstar.md` first, and follow the behavioural contract in the
-handbook's `ai-collaboration.md` (notably: merging/tagging/releasing need an
-explicit, per-release go-ahead).
+handbook's `ai-collaboration.md` (notably: merging a pull request is the user's
+call, merge by merge; a release needs its own explicit ask, which covers the
+whole CLI flow, `git back-merge` included).
