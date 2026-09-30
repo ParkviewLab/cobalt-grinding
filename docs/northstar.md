@@ -42,7 +42,7 @@ Memory is **earned, not stored**. CoGrind never copies the sources it ingests �
 
 CoGrind's Smalt holds more than the user's knowledge. It also holds the Smalt's own scaffolding — and that scaffolding lives by the same markdown-canonical, propose-don't-act discipline as everything else:
 
-- **Schema** — page types, frontmatter shape, link-edge vocabulary (`SCHEMA.md` + `frontmatter_schema.py`).
+- **Schema** — page types, frontmatter shape, link-edge vocabulary (`SCHEMA.md`, with smalt-mcp's page models in `schema.py`).
 - **Policy** — agent behavior rules (`POLICY.md`).
 - **Agent definitions** — the SME agents that run the cognitive skills (role, domain, prompt, declared toolkit), as markdown.
 - **Tool inventory** — which MCP servers CoGrind uses (the `mcp_servers_to_consider_ideas.md` notebook and its successors).
