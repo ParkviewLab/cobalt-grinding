@@ -16,6 +16,24 @@ section here, and uses the same content as the GitHub Release body.
 
 ## [Unreleased]
 
+## [v0.1.3] - 2026-09-30
+
+### Highlights
+
+This release caps the `mcp[cli]` dependency at `>=1.27,<2`, fixing a `ModuleNotFoundError` on startup for fresh `pip install cobalt-grinding` installs, which had been resolving to mcp 2.2.0 after that version removed `mcp.server.fastmcp`; installs from the image or from source were already unaffected because they use the lockfile. The remaining changes are documentation and internal alignment: the README, contributing guide, and architecture notes now state the current status, CI's test command, and the new dependency ceiling, three factual errors in the northstar were corrected, and the agent pointer files and CI workflow were brought into line with handbook v2.1.0.
+
+### Bug fixes
+
+- Keep mcp below 2, and bring the documents current (#9)
+
+### Docs
+
+- Three corrections of fact in the northstar (#10)
+
+### Maintenance
+
+- Align with handbook v2.1.0 (#8)
+
 ## [v0.1.2] - 2026-09-27
 
 ### Highlights
