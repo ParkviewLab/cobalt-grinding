@@ -227,7 +227,7 @@ requires-dist = [
     { name = "click", specifier = ">=8.1" },
     { name = "fastembed" },
     { name = "lancedb", specifier = ">=0.30" },
-    { name = "mcp", extras = ["cli"], specifier = ">=1.27.0" },
+    { name = "mcp", extras = ["cli"], specifier = ">=1.27,<2" },
     { name = "numpy" },
     { name = "platformdirs", specifier = ">=4.0" },
     { name = "pyarrow" },
