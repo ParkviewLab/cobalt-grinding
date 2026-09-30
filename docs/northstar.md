@@ -42,7 +42,7 @@ Memory is **earned, not stored**. CoGrind never copies the sources it ingests �
 
 CoGrind's Smalt holds more than the user's knowledge. It also holds the Smalt's own scaffolding — and that scaffolding lives by the same markdown-canonical, propose-don't-act discipline as everything else:
 
-- **Schema** — page types, frontmatter shape, link-edge vocabulary (`SCHEMA.md` + `frontmatter_schema.py`).
+- **Schema** — page types, frontmatter shape, link-edge vocabulary (`SCHEMA.md`, with smalt-mcp's page models in `schema.py`).
 - **Policy** — agent behavior rules (`POLICY.md`).
 - **Agent definitions** — the SME agents that run the cognitive skills (role, domain, prompt, declared toolkit), as markdown.
 - **Tool inventory** — which MCP servers CoGrind uses (the `mcp_servers_to_consider_ideas.md` notebook and its successors).
@@ -110,7 +110,7 @@ Worth being explicit about — these are the drift directions to push back on.
 One binary in this repo, one CLI in a sibling, one protocol between them:
 
 - **`cobalt-grinding`** — the daemon binary (shipped by this repo). Runs the brain. Hosts the MCP server (out to clients) and the MCP host (in to its own agents over child MCP servers). Bootstraps its substrate children on first run. The only program that touches the Smalt or lab notebook on disk is the corresponding child MCP server it supervises.
-- **`cogrind-workshop`** — the human-facing CLI (sibling repo, [ParkviewLab/cogrind-workshop](https://github.com/ParkviewLab/cogrind-workshop)). Pure MCP client. A polished interface for talking to a running cobalt-grinding daemon over the daemon's MCP server. Will grow into a REPL. Shares no business logic with the daemon — they're separate programs that meet at the protocol.
+- **`cogrind-workshop`** — the human-facing CLI (sibling repo, [ParkviewLab/cogrind-workshop](https://github.com/ParkviewLab/cogrind-workshop)). Pure MCP client. A polished interface for talking to a running cobalt-grinding daemon over the daemon's MCP server. Offers one-shot commands and an interactive REPL. Shares no business logic with the daemon — they're separate programs that meet at the protocol.
 - **MCP** — the only protocol. The CLI uses it. Claude Desktop / Claude Code use it. Any future web UI uses it. CoGrind's own agents reach external capabilities through it.
 
 `cogrind-workshop` is one of many possible MCP clients (Claude Desktop, Claude Code, future web UIs — same surface). Everything flows through MCP.
@@ -125,7 +125,7 @@ The vocabulary, kept tight on purpose so the metaphor and the system stay tracea
 |---|---|
 | **Cobalt-Grinding** | The project. The act. The metaphor's source — historically, grinding fired cobalt-blue glass produces a fine pigment. |
 | **CoGrind** | The styled project name in prose. PascalCase preserves the seam: **Co** is the periodic-table symbol for cobalt, **Grind** is the action. |
-| **`cobalt-grinding`** | The daemon binary, shipped by this repo. (Earlier drafts used a separate `cogrindd`/`cogrind` daemon+CLI split; M2.7 collapsed that — the daemon is now `cobalt-grinding` and the CLI moved to a sibling repo.) |
+| **`cobalt-grinding`** | The daemon binary, shipped by this repo. |
 | **`cogrind-workshop`** | The user-facing CLI; sibling repo [ParkviewLab/cogrind-workshop](https://github.com/ParkviewLab/cogrind-workshop). Pure MCP client; one of many that can drive a running `cobalt-grinding`. |
 | **The Smalt** | The canonical substrate of frontmattered markdown files (entity pages, concept pages, source pages, synthesis pages, index pages) plus their on-disk organization. The canonical-knowledge half of CoGrind's memory. *Smalt* is the historical name for the pigment that comes out of cobalt-grinding. |
 | **The lab notebook** | The research-in-flight substrate — proposals, experiments, gaps. The scientific-method record. Lives in `EBONY_ENRICHING_DIR`, served by `ebony-enriching`. Conceptually the lab notebook a scientist carries; the Smalt is the library. |
