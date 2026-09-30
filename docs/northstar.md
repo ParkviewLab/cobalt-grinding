@@ -110,7 +110,7 @@ Worth being explicit about — these are the drift directions to push back on.
 One binary in this repo, one CLI in a sibling, one protocol between them:
 
 - **`cobalt-grinding`** — the daemon binary (shipped by this repo). Runs the brain. Hosts the MCP server (out to clients) and the MCP host (in to its own agents over child MCP servers). Bootstraps its substrate children on first run. The only program that touches the Smalt or lab notebook on disk is the corresponding child MCP server it supervises.
-- **`cogrind-workshop`** — the human-facing CLI (sibling repo, [ParkviewLab/cogrind-workshop](https://github.com/ParkviewLab/cogrind-workshop)). Pure MCP client. A polished interface for talking to a running cobalt-grinding daemon over the daemon's MCP server. Will grow into a REPL. Shares no business logic with the daemon — they're separate programs that meet at the protocol.
+- **`cogrind-workshop`** — the human-facing CLI (sibling repo, [ParkviewLab/cogrind-workshop](https://github.com/ParkviewLab/cogrind-workshop)). Pure MCP client. A polished interface for talking to a running cobalt-grinding daemon over the daemon's MCP server. Offers one-shot commands and an interactive REPL. Shares no business logic with the daemon — they're separate programs that meet at the protocol.
 - **MCP** — the only protocol. The CLI uses it. Claude Desktop / Claude Code use it. Any future web UI uses it. CoGrind's own agents reach external capabilities through it.
 
 `cogrind-workshop` is one of many possible MCP clients (Claude Desktop, Claude Code, future web UIs — same surface). Everything flows through MCP.
